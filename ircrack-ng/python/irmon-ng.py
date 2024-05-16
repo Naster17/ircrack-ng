@@ -18,7 +18,7 @@ def width(string: str, string1: str = "")-> int:
 class TimeoutException(Exception):
     pass
 
-def write_with_timeout(serialPort, data, timeout=1):
+def write_with_timeout(serialPort, data, timeout=0.5):
     """
     Write data to the serial port with a timeout.
 
@@ -39,9 +39,9 @@ def write_with_timeout(serialPort, data, timeout=1):
     thread = threading.Thread(target=write_thread)
     thread.start()
     thread.join(timeout)
-
+    threading.Timer(1.0, write_thread, [thread])
+    
     if thread.is_alive():
-        
         raise TimeoutException("Write operation timed out.")
 
 
@@ -56,7 +56,6 @@ class Controler:
         a = 0
 
         for port in ports:
-            print(port)
             serialPort = serial.Serial(
                 port=port.device, baudrate=115200, bytesize=8, timeout=0.4, stopbits=serial.STOPBITS_ONE
             )
@@ -68,9 +67,7 @@ class Controler:
                 serialData = []
                 continue  # Skip this port if the write operation times out
             
-            # serialPort.write("info".encode("ascii"))
             
-
             for data in serialData:
                 if "IR Dongle" in data.decode("ascii"):
                     self.devices.append(f"ir{a}")
@@ -85,7 +82,7 @@ class Controler:
     def Info(self):
         print()
         print(self.myTable)
-        exit()
-    
+        print()
+        
     
 a = Controler()
