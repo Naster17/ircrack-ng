@@ -58,7 +58,7 @@ class Controler:
             try:
                 serialData = self.serialPort.readline()
                 serialData = serialData.decode("ascii")
-                if "Repeat" not in serialData and "noise" not in serialData and len(serialData) > 5:
+                if "Repeat" not in serialData and "noise" not in serialData and "packet:" not in serialData and len(serialData) > 5:
                     self.cls()
                     data = serialData.split()
                     myTable.add_row([clear(data[0]), clear(data[1]), clear(data[2]), clear(data[3]), ' '.join(data[4:])])
