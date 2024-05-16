@@ -40,7 +40,6 @@ class Controler:
                 if "IR Dongle" in data.decode("ascii"):
                     self.devices.append(f"ir{a}")    
                     a += 1
-                    print("Found dongle")
                     return serialPort
     
     def cls(self):
@@ -54,6 +53,7 @@ class Controler:
         myTable = PrettyTable(["Protocol", "Address", "Command", "Raw Data", "Bits"])
         self.serialPort.write("startListner".encode("ascii"))
         self.cls();
+        print("Waiting for packets...")
         while True:
             try:
                 serialData = self.serialPort.readline()

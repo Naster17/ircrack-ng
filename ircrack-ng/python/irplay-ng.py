@@ -16,16 +16,15 @@ def width(string: str, string1: str = "")-> int:
 class Controler:
     def __init__(self):
         self.devices = []
-        self.myTable = PrettyTable(["Device", "Firmware", "Driver"]) 
         self.serialPort = self.Port()
-    
+        
     def Port(self):
         ports = serial.tools.list_ports.comports(include_links=False) # auto found
         a = 0
-
+        
         for port in ports:
             serialPort = serial.Serial(
-                port=port.device, baudrate=115200, bytesize=8, timeout=0.4, stopbits=serial.STOPBITS_ONE
+                port=port.device, baudrate=115200, bytesize=8, timeout=0.5, stopbits=serial.STOPBITS_ONE
             )
             time.sleep(0.2)
             serialPort.write("info".encode("ascii"))
@@ -34,18 +33,15 @@ class Controler:
             
             for data in serialData:
                 if "IR Dongle" in data.decode("ascii"):
-                    self.devices.append(f"ir{a}")
-                    self.myTable.add_row([self.devices[a], clear(serialData[1])+clear(serialData[2]), clear(serialData[4])])
+                    self.devices.append(f"ir{a}")    
                     a += 1
+                    return serialPort
                     
-        self.Info()
-        
         return serialPort
     
-    
-    def Info(self):
-        print()
-        print(self.myTable)
+    def SendPacket(self):
+        ...    
+
     
     
 a = Controler()

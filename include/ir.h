@@ -81,7 +81,7 @@ void receiverListner(Print *aSerial)
   while (1)
   {
     capturePacket(&IrCustomData, aSerial);
-    delay(100);
+    delay(50);
   }
 };
 // Attacks
