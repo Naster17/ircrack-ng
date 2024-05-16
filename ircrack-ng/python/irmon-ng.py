@@ -18,6 +18,17 @@ class TimeoutException(Exception):
     pass
 
 def write_with_timeout(serialPort, data, timeout=2):
+    """
+    Write data to the serial port with a timeout.
+
+    Args:
+        serialPort: The serial port to write to.
+        data: The data to write.
+        timeout: The timeout in seconds.
+
+    Raises:
+        TimeoutException: If the write operation times out.
+    """
     def write_thread():
         try:
             serialPort.write(data)
