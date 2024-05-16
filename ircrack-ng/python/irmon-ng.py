@@ -14,10 +14,11 @@ def clear(string: str) -> str:
 def width(string: str, string1: str = "")-> int:
     return len(string) + len(string1) + 4
 
+
 class TimeoutException(Exception):
     pass
 
-def write_with_timeout(serialPort, data, timeout=2):
+def write_with_timeout(serialPort, data, timeout=1):
     """
     Write data to the serial port with a timeout.
 
@@ -40,6 +41,7 @@ def write_with_timeout(serialPort, data, timeout=2):
     thread.join(timeout)
 
     if thread.is_alive():
+        
         raise TimeoutException("Write operation timed out.")
 
 
@@ -83,6 +85,7 @@ class Controler:
     def Info(self):
         print()
         print(self.myTable)
+        exit()
     
     
 a = Controler()
