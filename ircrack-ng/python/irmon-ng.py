@@ -16,7 +16,7 @@ def width(string: str, string1: str = "")-> int:
 class Controler:
     def __init__(self):
         self.devices = []
-        self.myTable = PrettyTable(["Device", "Firmware", "Driver"]) 
+        self.myTable = PrettyTable(["Device", "Port", "Firmware", "Driver"]) 
         self.serialPort = self.Port()
     
     def Port(self):
@@ -30,12 +30,12 @@ class Controler:
             time.sleep(0.2)
             serialPort.write("info".encode("ascii"))
             serialData = serialPort.readlines() # save to list 
-            serialData.append(bytes(port.description, "ascii"))
-            
+
+
             for data in serialData:
                 if "IR Dongle" in data.decode("ascii"):
                     self.devices.append(f"ir{a}")
-                    self.myTable.add_row([self.devices[a], clear(serialData[1])+clear(serialData[2]), clear(serialData[4])])
+                    self.myTable.add_row([self.devices[a], port.device, clear(serialData[1])+clear(serialData[2]), port.description])
                     a += 1
                     
         self.Info()
