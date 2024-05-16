@@ -42,7 +42,7 @@ def write_with_timeout(serialPort, data, timeout=0.5):
 
     thread = threading.Thread(target=write_thread)
     thread.start()
-    thread.join(timeout)
+    # thread.join(timeout)
     threading.Timer(1.0, stop_thread, [thread])
     
     if thread.is_alive():
