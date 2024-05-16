@@ -24,6 +24,7 @@ class Controler:
         a = 0
 
         for port in ports:
+            print(port)
             serialPort = serial.Serial(
                 port=port.device, baudrate=115200, bytesize=8, timeout=0.4, stopbits=serial.STOPBITS_ONE
             )
