@@ -1,4 +1,4 @@
-import sys
+import sys 
 import serial
 import time
 import threading
@@ -37,7 +37,8 @@ def write_with_timeout(serialPort, data, timeout=0.5):
         except Exception as e:
             raise TimeoutException(e)
 
-    thread = threading.Thread(target=write_thread).start()
+    thread = threading.Thread(target=write_thread)
+    thread.start()
     thread.join(timeout)
     
     if thread.is_alive():
@@ -82,7 +83,6 @@ class Controler:
         print()
         print(self.myTable)
         print()
-        sys.exit()
         
-    
+
 a = Controler()
