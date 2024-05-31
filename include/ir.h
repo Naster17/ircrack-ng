@@ -65,11 +65,27 @@ void sendPacket(IRData *IrStructd)
   printIRResultShort(&Serial, IrStructd, false);
 };
 
-void craftPacket(IRData *IrStructd, decode_type_t protocol, uint16_t address, uint16_t command)
+template <typename T>
+T getValue(String input, const char *find_from)
 {
-  IrStructd->protocol = protocol;
-  IrStructd->address = address;
-  IrStructd->address = command;
+  int protocolIndex = input.indexOf(find_from);
+
+  int startIndex = protocolIndex + strlen(find_from);
+  int endIndex = input.indexOf(' ', startIndex);
+
+  String value = input.substring(startIndex, endIndex);
+
+  return static_cast<T>(value.toInt());
+}
+
+void sendPacket(String input)
+{
+  // cmd:send protocol: 8 address: 61184 command: 2
+  // uint16_t protocol = NEC;
+  // uint16_t address = 0xEF00;
+  // uint16_t command = 0x2;
+  IrSender.write(getValue<decode_type_t>(input, "protocol: "), getValue<uint16_t>(input, "address: "), getValue<uint16_t>(input, "command: "));
+  delay(50);
 };
 
 void savePacket();
@@ -77,7 +93,7 @@ void savePacket();
 // Listners
 void receiverListner(Print *aSerial)
 {
-  
+
   while (1)
   {
     capturePacket(&IrCustomData, aSerial);

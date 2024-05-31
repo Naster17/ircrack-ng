@@ -4,9 +4,13 @@ import serial.tools.list_ports
 from prettytable import PrettyTable 
 from os import system, name
 
+def cls():
+    if name == 'nt':
+        system('cls')
+    else:
+        system('clear')
 
 def clear(string: str) -> str:
-            # b'Protocol=NEC Address=0xEF00 Command=0xA Raw-Data=0xF50AEF00 32 bits LSB first\r\n'
     try:
         string = string.decode('ascii')
     except:
@@ -17,6 +21,7 @@ def clear(string: str) -> str:
 
 def width(string: str, string1: str = "")-> int:
     return len(string) + len(string1) + 4
+
 
 class Controler:
     def __init__(self):
@@ -32,8 +37,8 @@ class Controler:
                 port=port.device, baudrate=115200, bytesize=8, timeout=0.5, stopbits=serial.STOPBITS_ONE
             )
             time.sleep(0.2)
-            serialPort.write("info".encode("ascii"))
-            serialData = serialPort.readlines() # save to list 
+            serialPort.write("cmd:info".encode("ascii"))
+            serialData = serialPort.readlines()
             serialData.append(bytes(port.description, "ascii"))
             
             for data in serialData:
@@ -42,24 +47,18 @@ class Controler:
                     a += 1
                     return serialPort
     
-    def cls(self):
-        if name == 'nt':
-            system('cls')
-        else:
-            system('clear')
-        
     def Listner(self):
         # b'Protocol=NEC Address=0xEF00 Command=0xA Raw-Data=0xF50AEF00 32 bits LSB first\r\n'
         myTable = PrettyTable(["Protocol", "Address", "Command", "Raw Data", "Bits"])
-        self.serialPort.write("startListner".encode("ascii"))
-        self.cls();
+        self.serialPort.write("cmd:start_listner".encode("ascii"))
+        cls();
         print("Waiting for packets...")
         while True:
             try:
                 serialData = self.serialPort.readline()
                 serialData = serialData.decode("ascii")
                 if "Repeat" not in serialData and "noise" not in serialData and "packet:" not in serialData and len(serialData) > 5:
-                    self.cls()
+                    cls()
                     data = serialData.split()
                     myTable.add_row([clear(data[0]), clear(data[1]), clear(data[2]), clear(data[3]), ' '.join(data[4:])])
                     print(myTable)
@@ -67,6 +66,8 @@ class Controler:
             except KeyboardInterrupt:
                 self.serialPort.write("stop".encode("ascii"))
                 exit(0)
+    
+
     
 a = Controler()
 a.Listner()

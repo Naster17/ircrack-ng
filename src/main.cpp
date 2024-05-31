@@ -3,7 +3,9 @@
 
 void setup()
 {
+  
   beginReceiver();
+  beginSender();
   beginSerial();
 }
 
