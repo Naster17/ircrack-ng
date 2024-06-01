@@ -29,23 +29,25 @@ class Controler:
         self.serialPort = self.Port()
         
     def Port(self):
-        ports = serial.tools.list_ports.comports(include_links=False) # auto found
         a = 0
-        
+        ports = serial.tools.list_ports.comports(include_links=False) # auto found
         for port in ports:
-            serialPort = serial.Serial(
-                port=port.device, baudrate=115200, bytesize=8, timeout=0.5, stopbits=serial.STOPBITS_ONE
-            )
-            time.sleep(0.2)
+            serialPort = serial.Serial(port=port.device, baudrate=115200, bytesize=8, timeout=0.5)
+            time.sleep(2)
             serialPort.write("cmd:info".encode("ascii"))
-            serialData = serialPort.readlines()
-            serialData.append(bytes(port.description, "ascii"))
+            b = 0
+            while b < 10: 
+                serialData = serialPort.readlines() # save to list 
+                time.sleep(0.10)
+                b += 1
+                if serialData:
+                    break
             
             for data in serialData:
                 if "IR Dongle" in data.decode("ascii"):
                     self.devices.append(f"ir{a}")    
                     a += 1
-                    return serialPort
+                    return serialPort 
     
     def Listner(self):
         # b'Protocol=NEC Address=0xEF00 Command=0xA Raw-Data=0xF50AEF00 32 bits LSB first\r\n'

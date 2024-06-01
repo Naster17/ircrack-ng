@@ -84,7 +84,7 @@ void sendPacket(String input)
   // uint16_t protocol = NEC;
   // uint16_t address = 0xEF00;
   // uint16_t command = 0x2;
-  IrSender.write(getValue<decode_type_t>(input, "protocol: "), getValue<uint16_t>(input, "address: "), getValue<uint16_t>(input, "command: "));
+  IrSender.write(getValue<decode_type_t>(input, "protocol: "), getValue<uint16_t>(input, "address: "), getValue<uint16_t>(input, "command: "), getValue<int_fast8_t>(input, "repeats: "));
   delay(50);
 };
 

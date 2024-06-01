@@ -24,7 +24,7 @@ bool stringContains(const char *str, const char *substring)
 void beginSerial()
 {
     Serial.begin(115200);
-    beginInfo(&Serial);
+    // beginInfo(&Serial);
 };
 
 void serial()

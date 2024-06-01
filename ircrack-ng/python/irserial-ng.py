@@ -13,9 +13,11 @@ while 1:
     if inp == "exit": exit()
     
     serialPort.write(inp.encode("ascii"))
-
-    while 1: 
+    a = 0
+    while a < 3: 
         serialData = serialPort.readlines() # save to list 
+        time.sleep(0.10)
+        a += 1
         if serialData:
             break
         
