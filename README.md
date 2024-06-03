@@ -15,5 +15,9 @@
 ## Exaple commands
 - ```python irplay-ng.py -a 0xEF00 -c 0x3 -p NEC -d COM10```
 
-## Build Instruction
+## Install 
 
+## Build
+
+## Dev
+Default in Platform-IO project. Simply clone and add to projects in platform-io
