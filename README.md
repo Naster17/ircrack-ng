@@ -1,5 +1,6 @@
 # ircrack-ng
-A set for testing infrared protocols for penetration using a custom Arduino-based device
+
+![11](https://github.com/Naster17/ircrack-ng/assets/62520991/7d0313cb-9eb1-4b3e-9d7d-608136b41cf8)
 
 ## Binaries (python, C++)
 - ```irmon-ng``` - Search for available connected devices. Checking the firmware version and other useful information about devices
