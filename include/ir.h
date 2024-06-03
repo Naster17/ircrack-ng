@@ -78,7 +78,7 @@ T getValue(String input, const char *find_from)
   return static_cast<T>(value.toInt());
 }
 
-void sendPacket(String input)
+void sendPacket(String input, Print *aSerial)
 {
   // cmd:send protocol: 8 address: 61184 command: 2
   // uint16_t protocol = NEC;
@@ -86,6 +86,7 @@ void sendPacket(String input)
   // uint16_t command = 0x2;
   IrSender.write(getValue<decode_type_t>(input, "protocol: "), getValue<uint16_t>(input, "address: "), getValue<uint16_t>(input, "command: "), getValue<int_fast8_t>(input, "repeats: "));
   delay(50);
+  aSerial->println("ok");
 };
 
 void savePacket();

@@ -4,6 +4,9 @@
 #include <Arduino.h>
 #include "ir.h"
 
+// if serial not connected save all captured signals to memory
+static bool connected = false;
+
 bool stringContains(const char *str, const char *substring)
 {
     size_t strLen = strlen(str);
@@ -36,6 +39,7 @@ void serial()
 
         if (stringContains(input.c_str(), "cmd:info"))
         {
+            connected = true;
             beginInfo(&Serial);
         }
         if (stringContains(input.c_str(), "cmd:wewe"))
@@ -48,7 +52,7 @@ void serial()
         }
         if (stringContains(input.c_str(), "cmd:send"))
         {
-            sendPacket(input);
+            sendPacket(input, &Serial);
         }
     }
 };

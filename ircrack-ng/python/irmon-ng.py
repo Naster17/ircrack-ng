@@ -59,13 +59,15 @@ class Controler:
             serialPort = serial.Serial(
                 port=port.device, baudrate=115200, bytesize=8, timeout=0.4, stopbits=serial.STOPBITS_ONE
             )
-            time.sleep(0.2)
-            try:
-                write_with_timeout(serialPort, "info".encode("ascii"))
+            time.sleep(2)
+            serialPort.write("cmd:info".encode("ascii"))
+            b = 0
+            while b < 10: 
                 serialData = serialPort.readlines() # save to list 
-            except TimeoutException:
-                serialData = []
-                continue  # Skip this port if the write operation times out
+                time.sleep(0.10)
+                b += 1
+                if serialData:
+                    break
             
             
             for data in serialData:
