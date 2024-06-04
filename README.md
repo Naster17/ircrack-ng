@@ -4,7 +4,7 @@
 
 ## Binaries (python, C++)
 - ```irmon-ng``` - Search for available connected devices. Checking the firmware version and other useful information about devices
-- ```irdump-ng``` - IR signal interception/sniffing mode. Displaying all the necessary information about the intercepted signal
+- ```irdump-ng``` - IR signal interception/sniffing mode. Displaying all the necessary information about the intercepted signals
 - ```irplay-ng``` - Sending signals. With support for hexadecimal and decimal. See more below
 - ```irserial-ng``` - Direct connection via serial port. Useful for debugging and understanding how the device works
 - ```irdatabase-ng``` - Using pre-ready IR signals via database
@@ -15,5 +15,9 @@
 ## Exaple commands
 - ```python irplay-ng.py -a 0xEF00 -c 0x3 -p NEC -d COM10```
 
-## Build Instruction
+## Install 
 
+## Build
+
+## Dev
+Default in Platform-IO project. Simply clone and add to projects in platform-io
