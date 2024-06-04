@@ -1,7 +1,7 @@
 #if defined(__AVR__)
 
 // Firmware
-#define DONGLE_VERSION "1.0"
+#define DONGLE_VERSION "1.1"
 #define FIRMWARE "NasterFirmware"
 #define DEVICE "IR Dongle"
 // Pins

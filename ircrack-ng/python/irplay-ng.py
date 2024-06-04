@@ -140,14 +140,10 @@ parser = argparse.ArgumentParser(description="Decode type argument example")
 parser.add_argument("-p", "--protocol", metavar="", type=str, default='0', required=True, help="Protocol (Name or Value, NEC/8 ...)")
 parser.add_argument("-a", "--address", metavar="", type=str, default='0', required=True, help="Address: (HEX or Decimal, 0xEF00/61184 ...)")
 parser.add_argument("-c", "--command", metavar="", type=str, default='0', required=True, help="Command: (HEX or Decimal, 0x2/2 ...)")
-parser.add_argument("-d", "--device", metavar="", type=str, help="Port: (COM10, ttyUSB0, ...)")
+parser.add_argument("-d", "--device", metavar="", type=str, default='', help="Port: (COM10, ttyUSB0, ...)")
 
 args = parser.parse_args()
 
 
-if args.device:
-    a = Controler(args.device)
-else:
-    a = Controler()
-    
+a = Controler(args.device)  
 a.SendPacket(args.protocol, args.address, args.command)
