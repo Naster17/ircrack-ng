@@ -117,33 +117,34 @@ class Controler:
                     return serialPort
     
     
-    def SendPacket(self, protocol, address, command):
-        # example: cmd:send protocol: 8 address: 61184 command: 2 Repeats: 10 # 
+    def SendPacket(self, protocol, address, command, repeats):
+        # example: cmd:send protocol: 8 address: 61184 command: 2 repeats: 10 # 
         self.serialPort.readall()
         if "0x" in address or "0X" in address:
-            print(f"\n{self.devices[0]}:\n\tprotocol: {protocol}\n\taddress:  {address}\n\tcommand:  {command}")
-            self.serialPort.write(f"cmd:send protocol: {protocol_to_int(protocol)} address: {int(address, 16)} command: {int(command, 16)}".encode("ascii"))
+            print(f"\n{self.devices[0]}:\n\tprotocol: {protocol}\n\taddress:  {address}\n\tcommand:  {command}\n\trepeats:  {repeats}")
+            self.serialPort.write(f"cmd:send protocol: {protocol_to_int(protocol)} address: {int(address, 16)} command: {int(command, 16)} repeats: {repeats}".encode("ascii"))
         else:
-            print(f"\n{self.devices[0]}:\n\tprotocol: {protocol}\n\taddress:  0x{hex(int(address)).upper()[2:]}\n\tcommand:  0x{hex(int(command)).upper()[2:]}")
-            self.serialPort.write(f"cmd:send protocol: {protocol_to_int(protocol)} address: {address} command: {command}".encode("ascii"))
+            print(f"\n{self.devices[0]}:\n\tprotocol: {protocol}\n\taddress:  0x{hex(int(address)).upper()[2:]}\n\tcommand:  0x{hex(int(command)).upper()[2:]}\n\trepeats:  {repeats}")
+            self.serialPort.write(f"cmd:send protocol: {protocol_to_int(protocol)} address: {address} command: {command} repeats: {repeats}".encode("ascii"))
         b = 0
-        while b < 10: 
+        while b < int(repeats)+10: 
             serialData = self.serialPort.readlines() # save to list 
             time.sleep(0.10)
             b += 1
             if serialData:
                 break
-            
+        
         print(f"\n{self.devices[0]}: {clear(serialData[0])}")
     
 parser = argparse.ArgumentParser(description="Decode type argument example")
 parser.add_argument("-p", "--protocol", metavar="", type=str, default='0', required=True, help="Protocol (Name or Value, NEC/8 ...)")
 parser.add_argument("-a", "--address", metavar="", type=str, default='0', required=True, help="Address: (HEX or Decimal, 0xEF00/61184 ...)")
 parser.add_argument("-c", "--command", metavar="", type=str, default='0', required=True, help="Command: (HEX or Decimal, 0x2/2 ...)")
+parser.add_argument("-r", "--repeats", metavar="", type=str, default='1', help="Repeats: (1-4294967295)")
 parser.add_argument("-d", "--device", metavar="", type=str, default='', help="Port: (COM10, ttyUSB0, ...)")
 
 args = parser.parse_args()
 
 
 a = Controler(args.device)  
-a.SendPacket(args.protocol, args.address, args.command)
+a.SendPacket(args.protocol, args.address, args.command, args.repeats)    

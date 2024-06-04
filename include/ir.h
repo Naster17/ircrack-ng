@@ -4,6 +4,10 @@
 #include <Arduino.h>
 #include <IRremote.hpp>
 #include "definitions.h"
+#include "memory.h"
+
+// if serial not connected save all captured signals to memory
+static bool connected = false;
 
 IRData IrCustomData;
 struct IrRawStruct
@@ -14,6 +18,7 @@ struct IrRawStruct
 
 void beginInfo(Print *aSerial)
 {
+  connected = true;
   aSerial->println(F("device: " DEVICE "\nfirmware: " FIRMWARE "\nversion: " DONGLE_VERSION));
   aSerial->print(F("protocols: "));
   printActiveIRProtocols(aSerial);
@@ -84,12 +89,15 @@ void sendPacket(String input, Print *aSerial)
   // uint16_t protocol = NEC;
   // uint16_t address = 0xEF00;
   // uint16_t command = 0x2;
-  IrSender.write(getValue<decode_type_t>(input, "protocol: "), getValue<uint16_t>(input, "address: "), getValue<uint16_t>(input, "command: "), getValue<int_fast8_t>(input, "repeats: "));
-  delay(50);
-  aSerial->println("ok");
+  uint32_t a = 0;
+  while (a < getValue<uint32_t>(input, "repeats: "))
+  {
+    IrSender.write(getValue<decode_type_t>(input, "protocol: "), getValue<uint16_t>(input, "address: "), getValue<uint16_t>(input, "command: "));
+    a = a + 1;
+    delay(50);
+  }
+  aSerial->println("OK");
 };
-
-void savePacket();
 
 // Listners
 void receiverListner(Print *aSerial)
@@ -102,6 +110,7 @@ void receiverListner(Print *aSerial)
   }
 };
 // Attacks
+
 void brutforce();
 void database();
 
