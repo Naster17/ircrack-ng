@@ -40,10 +40,6 @@ void serial()
         {
             beginInfo(&Serial);
         }
-        if (stringContains(input.c_str(), "cmd:wewe"))
-        {
-            Serial.println("wewe boy");
-        }
         if (stringContains(input.c_str(), "cmd:start_listner"))
         {
             receiverListner(&Serial, true);
@@ -52,10 +48,19 @@ void serial()
         {
             sendPacket(input, &Serial);
         }
+        // Memory
+        if (stringContains(input.c_str(), "cmd:dump_memory"))
+        {
+            read_from_memory(&Serial);
+        }
+        if (stringContains(input.c_str(), "cmd:clear_memory"))
+        {
+            clear_memory();
+        }
     }
     else
     {
-        receiverListner(&Serial, false);
+        // receiverListner(&Serial, false);
     }
 };
 

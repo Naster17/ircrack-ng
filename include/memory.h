@@ -31,21 +31,16 @@ void save_to_memory(decode_type_t protocol, uint16_t address, uint16_t command)
     Address = Address + 6;
 };
 
-// void readPacket(int addr)
-// {
-//   int eeAddress = addr;
-//   IRData obj2;
+void read_from_memory(Print *aSerial)
+{
+    IRDataSave obj;
+    EEPROM.get(Address, obj);
 
-//   EEPROM.get(eeAddress, obj2);
-
-//   Serial.println("Read custom object from EEPROM: ");
-//   Serial.println(obj2.protocol);
-//   Serial.println(obj2.address);
-//   Serial.println(obj2.command);
-// }
-
-void read_from_memory() {
-
+    aSerial->print("EEPROM:");
+    aSerial->print(obj.protocol);
+    aSerial->print(obj.address);
+    aSerial->print(obj.command);
+    aSerial->println();
 };
 
 void clear_memory()
