@@ -6,9 +6,6 @@
 #include "definitions.h"
 #include "memory.h"
 
-// if serial not connected save all captured signals to memory
-static bool connected = false;
-
 IRData IrCustomData;
 struct IrRawStruct
 {
@@ -18,7 +15,6 @@ struct IrRawStruct
 
 void beginInfo(Print *aSerial)
 {
-  connected = true;
   aSerial->println(F("device: " DEVICE "\nfirmware: " FIRMWARE "\nversion: " DONGLE_VERSION));
   aSerial->print(F("protocols: "));
   printActiveIRProtocols(aSerial);
@@ -35,7 +31,7 @@ void beginSender()
 };
 
 // Packets
-void capturePacket(IRData *IrStructd, Print *aSerial)
+void capturePacket(IRData *IrStructd, Print *aSerial, bool connected)
 {
   if (IrReceiver.decode())
   {
@@ -58,6 +54,8 @@ void capturePacket(IRData *IrStructd, Print *aSerial)
     {
       IrReceiver.resume();
       IrReceiver.printIRResultShort(aSerial);
+      if (!connected)
+        save_to_memory(IrReceiver.decodedIRData.protocol, IrReceiver.decodedIRData.address, IrReceiver.decodedIRData.command);
     }
     aSerial->println();
   }
@@ -85,10 +83,7 @@ T getValue(String input, const char *find_from)
 
 void sendPacket(String input, Print *aSerial)
 {
-  // cmd:send protocol: 8 address: 61184 command: 2
-  // uint16_t protocol = NEC;
-  // uint16_t address = 0xEF00;
-  // uint16_t command = 0x2;
+  // cmd:send protocol: 8 address: 61184 command: 2 repeats: 1
   uint32_t a = 0;
   while (a < getValue<uint32_t>(input, "repeats: "))
   {
@@ -100,12 +95,12 @@ void sendPacket(String input, Print *aSerial)
 };
 
 // Listners
-void receiverListner(Print *aSerial)
+void receiverListner(Print *aSerial, bool connected)
 {
 
   while (1)
   {
-    capturePacket(&IrCustomData, aSerial);
+    capturePacket(&IrCustomData, aSerial, connected);
     delay(50);
   }
 };

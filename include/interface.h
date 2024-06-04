@@ -3,6 +3,7 @@
 
 #include <Arduino.h>
 #include "ir.h"
+#include "memory.h"
 
 
 bool stringContains(const char *str, const char *substring)
@@ -45,12 +46,16 @@ void serial()
         }
         if (stringContains(input.c_str(), "cmd:start_listner"))
         {
-            receiverListner(&Serial);
+            receiverListner(&Serial, true);
         }
         if (stringContains(input.c_str(), "cmd:send"))
         {
             sendPacket(input, &Serial);
         }
+    }
+    else
+    {
+        receiverListner(&Serial, false);
     }
 };
 
